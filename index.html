@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hostería Los Sauces — Reservas</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #ffffff;
+      --bg-secondary: #f5f5f3;
+      --bg-info: #e6f1fb;
+      --bg-success: #eaf3de;
+      --text: #1a1a18;
+      --text-secondary: #6b6b68;
+      --text-tertiary: #9e9e9a;
+      --text-info: #185fa5;
+      --text-success: #3b6d11;
+      --border: rgba(0,0,0,0.12);
+      --border-md: rgba(0,0,0,0.25);
+      --border-info: #378add;
+      --border-success: #639922;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1e1e1c;
+        --bg-secondary: #2a2a28;
+        --bg-info: #0c2a45;
+        --bg-success: #172e08;
+        --text: #f0ede8;
+        --text-secondary: #a0a09c;
+        --text-tertiary: #6b6b68;
+        --text-info: #85b7eb;
+        --text-success: #97c459;
+        --border: rgba(255,255,255,0.1);
+        --border-md: rgba(255,255,255,0.22);
+        --border-info: #378add;
+        --border-success: #639922;
+      }
+    }
+    body {
+      font-family: var(--font);
+      background: var(--bg-secondary);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+    }
+    .wrap { max-width: 680px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 2rem; }
+    .header h1 { font-size: 26px; font-weight: 500; color: var(--text); }
+    .header p { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
+    .steps { display: flex; justify-content: center; align-items: center; gap: 0; margin-bottom: 2rem; flex-wrap: wrap; }
+    .step { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-tertiary); }
+    .step.active { color: var(--text); font-weight: 500; }
+    .step.done { color: var(--text-success); }
+    .step-num { width: 24px; height: 24px; border-radius: 50%; border: 0.5px solid var(--border-md); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; }
+    .step.active .step-num { border-color: var(--text); }
+    .step.done .step-num { background: var(--bg-success); border-color: var(--border-success); color: var(--text-success); }
+    .step-line { width: 28px; height: 0.5px; background: var(--border); margin: 0 4px; }
+    .card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1rem; }
+    .section-title { font-size: 12px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 1rem; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .full { grid-column: 1 / -1; }
+    .field { display: flex; flex-direction: column; gap: 4px; }
+    .field label { font-size: 13px; color: var(--text-secondary); }
+    .field input, .field select, .field textarea {
+      font-family: var(--font);
+      font-size: 14px;
+      padding: 8px 10px;
+      border: 0.5px solid var(--border-md);
+      border-radius: var(--radius-md);
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--border-info); }
+    .field textarea { resize: vertical; min-height: 72px; }
+    .vehiculo-toggle { display: flex; gap: 8px; margin-bottom: 12px; }
+    .toggle-btn {
+      flex: 1; padding: 8px;
+      border: 0.5px solid var(--border-md);
+      border-radius: var(--radius-md);
+      background: transparent;
+      font-size: 13px; color: var(--text-secondary);
+      cursor: pointer; transition: all 0.15s; font-family: var(--font);
+    }
+    .toggle-btn.active { border-color: var(--text); color: var(--text); background: var(--bg-secondary); font-weight: 500; }
+    .hab-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .hab-card { border: 0.5px solid var(--border); border-radius: var(--radius-md); padding: 1rem; cursor: pointer; transition: all 0.15s; background: var(--bg); }
+    .hab-card:hover { border-color: var(--border-md); }
+    .hab-card.selected { border: 1.5px solid var(--border-info); background: var(--bg-info); }
+    .hab-name { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+    .hab-card.selected .hab-name { color: var(--text-info); }
+    .hab-detail { font-size: 12px; color: var(--text-secondary); }
+    .hab-card.selected .hab-detail { color: var(--text-info); opacity: 0.8; }
+    .hab-price { font-size: 15px; font-weight: 500; color: var(--text); margin-top: 8px; }
+    .hab-card.selected .hab-price { color: var(--text-info); }
+    .resumen-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 0.5px solid var(--border); font-size: 14px; }
+    .resumen-row:last-child { border-bottom: none; }
+    .resumen-label { color: var(--text-secondary); }
+    .resumen-val { font-weight: 500; color: var(--text); text-align: right; max-width: 60%; }
+    .total-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0 0; font-size: 18px; font-weight: 500; color: var(--text); border-top: 0.5px solid var(--border); margin-top: 4px; }
+    .badge-pago {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      border: 0.5px solid var(--border-md);
+      font-size: 13px; color: var(--text-secondary);
+      cursor: pointer; transition: all 0.15s; user-select: none;
+    }
+    .badge-pago.selected { border-color: var(--border-info); color: var(--text-info); background: var(--bg-info); font-weight: 500; }
+    .pago-opts { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      width: 100%; padding: 12px;
+      border-radius: var(--radius-md);
+      border: 0.5px solid var(--border-md);
+      background: var(--bg);
+      font-size: 15px; font-weight: 500; color: var(--text);
+      cursor: pointer; transition: all 0.15s; margin-top: 1rem;
+      font-family: var(--font);
+    }
+    .btn-primary:hover { background: var(--bg-secondary); }
+    .btn-primary:active { transform: scale(0.99); }
+    .btn-back { background: transparent; border: none; font-size: 13px; color: var(--text-secondary); cursor: pointer; padding: 0; margin-bottom: 1rem; display: flex; align-items: center; gap: 4px; font-family: var(--font); }
+    .btn-back:hover { color: var(--text); }
+    .mp-box { background: var(--bg-secondary); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; margin: 1rem 0; }
+    .mp-box .monto { font-size: 30px; font-weight: 500; color: var(--text); margin: 8px 0; }
+    .mp-box .sub { font-size: 13px; color: var(--text-secondary); }
+    .qr-sim { width: 130px; height: 130px; margin: 1rem auto; border-radius: 4px; background-image: repeating-conic-gradient(var(--border-md) 0% 25%, transparent 0% 50%); background-size: 10px 10px; }
+    .cbu-box { font-family: var(--font-mono); font-size: 13px; background: var(--bg); padding: 8px 12px; border-radius: var(--radius-md); color: var(--text); text-align: center; letter-spacing: 0.05em; border: 0.5px solid var(--border); }
+    .success-icon { width: 60px; height: 60px; border-radius: 50%; background: var(--bg-success); margin: 0 auto 1.25rem; display: flex; align-items: center; justify-content: center; }
+    .success-icon svg { width: 30px; height: 30px; stroke: var(--text-success); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .nota { font-size: 12px; color: var(--text-tertiary); text-align: center; margin-top: 10px; }
+    .error-msg { font-size: 12px; color: #c0392b; margin-top: 4px; display: none; }
+    @media (max-width: 480px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .hab-grid { grid-template-columns: 1fr; }
+      .full { grid-column: 1; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <h1>Hostería Los Sauces</h1>
+    <p>Rincón de los Sauces, Neuquén · Reservas online</p>
+  </div>
+
+  <div class="steps">
+    <div class="step active" id="s1"><span class="step-num">1</span> Datos</div>
+    <div class="step-line"></div>
+    <div class="step" id="s2"><span class="step-num">2</span> Habitación</div>
+    <div class="step-line"></div>
+    <div class="step" id="s3"><span class="step-num">3</span> Resumen</div>
+    <div class="step-line"></div>
+    <div class="step" id="s4"><span class="step-num">4</span> Pago</div>
+  </div>
+
+  <!-- PASO 1 -->
+  <div id="paso1">
+    <div class="card">
+      <div class="section-title">Datos del titular</div>
+      <div class="grid-2">
+        <div class="field"><label>Nombre *</label><input type="text" id="nombre" placeholder="Juan"></div>
+        <div class="field"><label>Apellido *</label><input type="text" id="apellido" placeholder="García"></div>
+        <div class="field"><label>DNI</label><input type="text" id="dni" placeholder="12.345.678"></div>
+        <div class="field"><label>Edad</label><input type="number" id="edad" placeholder="35" min="1" max="120"></div>
+        <div class="field"><label>Teléfono</label><input type="tel" id="telefono" placeholder="+54 9 299 ..."></div>
+        <div class="field"><label>Email</label><input type="email" id="email" placeholder="juan@email.com"></div>
+        <div class="field full"><label>Procedencia (ciudad / provincia)</label><input type="text" id="procedencia" placeholder="Ej: Neuquén capital"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Estadía</div>
+      <div class="grid-2">
+        <div class="field"><label>Fecha de ingreso *</label><input type="date" id="fecha_in"></div>
+        <div class="field"><label>Fecha de egreso *</label><input type="date" id="fecha_out"></div>
+        <div class="field"><label>Número de personas</label><input type="number" id="personas" placeholder="2" min="1" max="15"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Vehículo</div>
+      <div class="vehiculo-toggle">
+        <button class="toggle-btn active" id="veh-no" onclick="toggleVeh(false)">Sin vehículo</button>
+        <button class="toggle-btn" id="veh-si" onclick="toggleVeh(true)">Con vehículo</button>
+      </div>
+      <div id="veh-fields" style="display:none;">
+        <div class="grid-2">
+          <div class="field"><label>Tipo de vehículo</label>
+            <select id="tipo_veh">
+              <option value="">Seleccionar...</option>
+              <option>Auto</option>
+              <option>Camioneta</option>
+              <option>Moto</option>
+              <option>Casa rodante</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div class="field"><label>Patente</label><input type="text" id="patente" placeholder="AB 123 CD"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Observaciones</div>
+      <div class="field">
+        <label>Pedidos especiales o comentarios</label>
+        <textarea id="obs" placeholder="Ej: cama matrimonial, piso alto, llegada tardía..."></textarea>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="irPaso2()">Continuar a elegir habitación →</button>
+  </div>
+
+  <!-- PASO 2 -->
+  <div id="paso2" style="display:none;">
+    <button class="btn-back" onclick="irPaso(1)">← Volver</button>
+    <div class="card">
+      <div class="section-title">Elegí tu habitación</div>
+      <div class="hab-grid" id="hab-grid"></div>
+    </div>
+    <button class="btn-primary" onclick="irPaso3()">Ver resumen →</button>
+  </div>
+
+  <!-- PASO 3 -->
+  <div id="paso3" style="display:none;">
+    <button class="btn-back" onclick="irPaso(2)">← Volver</button>
+    <div class="card">
+      <div class="section-title">Resumen de reserva</div>
+      <div id="resumen-content"></div>
+    </div>
+    <div class="card">
+      <div class="section-title">Método de pago</div>
+      <div class="pago-opts">
+        <div class="badge-pago selected" id="mp-opt" onclick="selPago('mp')">Mercado Pago</div>
+        <div class="badge-pago" id="tf-opt" onclick="selPago('tf')">Transferencia bancaria</div>
+      </div>
+      <p style="font-size:13px; color: var(--text-secondary);" id="pago-desc">Pagá con QR o link de pago de Mercado Pago. Rápido y seguro.</p>
+    </div>
+    <button class="btn-primary" onclick="irPago()">Ir al pago →</button>
+  </div>
+
+  <!-- PASO 4 -->
+  <div id="paso4" style="display:none;">
+    <button class="btn-back" onclick="irPaso(3)">← Volver</button>
+    <div class="card" id="pago-card"></div>
+    <p class="nota">Al confirmar el pago, tu reserva quedará registrada automáticamente.</p>
+  </div>
+
+  <!-- PASO 5: Confirmación -->
+  <div id="paso5" style="display:none;">
+    <div class="card" style="text-align:center; padding: 2.5rem 1.5rem;">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2 style="font-size:20px; font-weight:500; margin-bottom:10px;">¡Reserva confirmada!</h2>
+      <p style="font-size:14px; color: var(--text-secondary); margin-bottom:1.5rem;" id="confirm-msg"></p>
+      <div id="confirm-resumen" style="text-align:left; border-top: 0.5px solid var(--border); padding-top: 1rem;"></div>
+    </div>
+    <p class="nota">Te enviamos la confirmación por email. Ante cualquier consulta contactanos.</p>
+  </div>
+</div>
+
+<script>
+  const HABITACIONES = [
+    { id: 'doble',     nombre: 'Doble',     camas: 2, desc: 'Ideal para parejas',      precio: 110000 },
+    { id: 'triple',    nombre: 'Triple',    camas: 3, desc: 'Para grupos pequeños',    precio: 155000 },
+    { id: 'cuadruple', nombre: 'Cuádruple', camas: 4, desc: 'Familias y grupos',       precio: 195000 },
+    { id: 'quintuple', nombre: 'Quíntuple', camas: 5, desc: 'Máxima capacidad',        precio: 230000 },
+  ];
+
+  let habSeleccionada = null;
+  let pagoMetodo = 'mp';
+  let tieneVehiculo = false;
+
+  function fmt(n) { return '$' + n.toLocaleString('es-AR'); }
+
+  function toggleVeh(val) {
+    tieneVehiculo = val;
+    document.getElementById('veh-fields').style.display = val ? 'block' : 'none';
+    document.getElementById('veh-si').className = 'toggle-btn' + (val ? ' active' : '');
+    document.getElementById('veh-no').className = 'toggle-btn' + (!val ? ' active' : '');
+  }
+
+  function renderHabs() {
+    document.getElementById('hab-grid').innerHTML = HABITACIONES.map(h => `
+      <div class="hab-card ${habSeleccionada === h.id ? 'selected' : ''}" onclick="selectHab('${h.id}')">
+        <div class="hab-name">${h.nombre}</div>
+        <div class="hab-detail">${h.camas} camas &middot; ${h.desc}</div>
+        <div class="hab-price">${fmt(h.precio)}<span style="font-size:12px;font-weight:400;"> / noche</span></div>
+      </div>`).join('');
+  }
+
+  function selectHab(id) { habSeleccionada = id; renderHabs(); }
+
+  function calcNoches() {
+    const fi = document.getElementById('fecha_in').value;
+    const fo = document.getElementById('fecha_out').value;
+    if (!fi || !fo) return 0;
+    const d = (new Date(fo) - new Date(fi)) / 86400000;
+    return d > 0 ? Math.round(d) : 0;
+  }
+
+  function irPaso(n) {
+    [1,2,3,4,5].forEach(i => {
+      document.getElementById('paso'+i).style.display = 'none';
+      const s = document.getElementById('s'+i);
+      if (s) s.className = 'step' + (i < n ? ' done' : i === n ? ' active' : '');
+    });
+    document.getElementById('paso'+n).style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function irPaso2() {
+    if (!document.getElementById('nombre').value.trim() || !document.getElementById('apellido').value.trim()) {
+      alert('Completá al menos nombre y apellido para continuar.'); return;
+    }
+    if (!document.getElementById('fecha_in').value || !document.getElementById('fecha_out').value) {
+      alert('Ingresá las fechas de estadía.'); return;
+    }
+    if (calcNoches() <= 0) { alert('La fecha de egreso debe ser posterior al ingreso.'); return; }
+    renderHabs();
+    irPaso(2);
+  }
+
+  function irPaso3() {
+    if (!habSeleccionada) { alert('Seleccioná una habitación para continuar.'); return; }
+    renderResumen();
+    irPaso(3);
+  }
+
+  function fmtFecha(str) {
+    const d = new Date(str + 'T12:00:00');
+    return d.toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  function renderResumen() {
+    const hab = HABITACIONES.find(h => h.id === habSeleccionada);
+    const noches = calcNoches();
+    const total = hab.precio * noches;
+    const rows = [
+      ['Huésped', document.getElementById('nombre').value + ' ' + document.getElementById('apellido').value],
+      ['DNI', document.getElementById('dni').value || '—'],
+      ['Email', document.getElementById('email').value || '—'],
+      ['Teléfono', document.getElementById('telefono').value || '—'],
+      ['Procedencia', document.getElementById('procedencia').value || '—'],
+      ['Personas', document.getElementById('personas').value || '1'],
+      ['Habitación', hab.nombre + ' (' + hab.camas + ' camas)'],
+      ['Ingreso', fmtFecha(document.getElementById('fecha_in').value)],
+      ['Egreso', fmtFecha(document.getElementById('fecha_out').value)],
+      ['Noches', noches],
+      ['Precio por noche', fmt(hab.precio)],
+    ];
+    if (tieneVehiculo) {
+      rows.push(['Vehículo', document.getElementById('tipo_veh').value || '—']);
+      rows.push(['Patente', document.getElementById('patente').value || '—']);
+    }
+    if (document.getElementById('obs').value.trim()) {
+      rows.push(['Observaciones', document.getElementById('obs').value.trim()]);
+    }
+    document.getElementById('resumen-content').innerHTML =
+      rows.map(([l,v]) => `<div class="resumen-row"><span class="resumen-label">${l}</span><span class="resumen-val">${v}</span></div>`).join('') +
+      `<div class="total-row"><span>Total</span><span>${fmt(total)}</span></div>`;
+  }
+
+  function selPago(m) {
+    pagoMetodo = m;
+    document.getElementById('mp-opt').className = 'badge-pago' + (m === 'mp' ? ' selected' : '');
+    document.getElementById('tf-opt').className = 'badge-pago' + (m === 'tf' ? ' selected' : '');
+    document.getElementById('pago-desc').textContent = m === 'mp'
+      ? 'Pagá con QR o link de pago de Mercado Pago. Rápido y seguro.'
+      : 'Transferencia bancaria al CBU del establecimiento.';
+  }
+
+  function irPago() {
+    const hab = HABITACIONES.find(h => h.id === habSeleccionada);
+    const total = hab.precio * calcNoches();
+    const card = document.getElementById('pago-card');
+    if (pagoMetodo === 'mp') {
+      card.innerHTML = `
+        <div class="section-title">Pago con Mercado Pago</div>
+        <div class="mp-box">
+          <div class="sub">Total a pagar</div>
+          <div class="monto">${fmt(total)}</div>
+          <div class="qr-sim"></div>
+          <div class="sub" style="margin-bottom:1rem;">Escaneá el QR con la app de Mercado Pago</div>
+          <button class="btn-primary" style="max-width:300px;margin:0 auto;" onclick="confirmar()">Simular pago exitoso →</button>
+        </div>
+        <p class="nota">En producción este QR es generado dinámicamente por la API de Mercado Pago.</p>`;
+    } else {
+      card.innerHTML = `
+        <div class="section-title">Transferencia bancaria</div>
+        <div class="mp-box">
+          <div class="sub">Total a transferir</div>
+          <div class="monto">${fmt(total)}</div>
+          <div class="sub" style="margin:12px 0 4px;">CBU</div>
+          <div class="cbu-box">0000003100012345678900</div>
+          <div class="sub" style="margin:10px 0 4px;">Alias</div>
+          <div class="cbu-box">SAUCES.HOSTERIA</div>
+          <button class="btn-primary" style="max-width:300px;margin:1rem auto 0;" onclick="confirmar()">Ya transferí, confirmar reserva →</button>
+        </div>
+        <p class="nota">En producción se puede validar subiendo el comprobante.</p>`;
+    }
+    irPaso(4);
+  }
+
+  function confirmar() {
+    const hab = HABITACIONES.find(h => h.id === habSeleccionada);
+    const noches = calcNoches();
+    const total = hab.precio * noches;
+    const nombre = document.getElementById('nombre').value;
+    document.getElementById('confirm-msg').textContent =
+      `Hola ${nombre}, tu reserva fue registrada con éxito. Pronto recibirás un email de confirmación.`;
+    document.getElementById('confirm-resumen').innerHTML = `
+      <div class="resumen-row"><span class="resumen-label">Huésped</span><span class="resumen-val">${nombre} ${document.getElementById('apellido').value}</span></div>
+      <div class="resumen-row"><span class="resumen-label">Habitación</span><span class="resumen-val">${hab.nombre} (${hab.camas} camas)</span></div>
+      <div class="resumen-row"><span class="resumen-label">Ingreso</span><span class="resumen-val">${fmtFecha(document.getElementById('fecha_in').value)}</span></div>
+      <div class="resumen-row"><span class="resumen-label">Egreso</span><span class="resumen-val">${fmtFecha(document.getElementById('fecha_out').value)}</span></div>
+      <div class="resumen-row"><span class="resumen-label">Noches</span><span class="resumen-val">${noches}</span></div>
+      <div class="total-row"><span>Total pagado</span><span>${fmt(total)}</span></div>`;
+    document.getElementById('s4').className = 'step done';
+    [1,2,3,4].forEach(i => document.getElementById('paso'+i).style.display = 'none');
+    document.getElementById('paso5').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  const hoy = new Date().toISOString().split('T')[0];
+  document.getElementById('fecha_in').min = hoy;
+  document.getElementById('fecha_out').min = hoy;
+  document.getElementById('fecha_in').addEventListener('change', function() {
+    document.getElementById('fecha_out').min = this.value;
+  });
+</script>
+</body>
+</html>
