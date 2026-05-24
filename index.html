@@ -3,33 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hotel TATA RISAU — Reservas</title>
+  <title>Hotel Tata Risau — Reservas</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #ffffff;
-      --bg-secondary: #f5f5f3;
-      --bg-info: #e6f1fb;
-      --bg-success: #eaf3de;
-      --text: #1a1a18;
-      --text-secondary: #6b6b68;
-      --text-tertiary: #9e9e9a;
-      --text-info: #185fa5;
-      --text-success: #3b6d11;
-      --border: rgba(0,0,0,0.12);
-      --border-md: rgba(0,0,0,0.25);
-      --border-info: #378add;
-      --border-success: #639922;
-      --radius-md: 8px;
-      --radius-lg: 12px;
+      --bg: #ffffff; --bg-secondary: #f5f5f3; --bg-info: #e6f1fb; --bg-success: #eaf3de;
+      --text: #1a1a18; --text-secondary: #6b6b68; --text-tertiary: #9e9e9a;
+      --text-info: #185fa5; --text-success: #3b6d11;
+      --border: rgba(0,0,0,0.12); --border-md: rgba(0,0,0,0.25);
+      --border-info: #378add; --border-success: #639922;
+      --radius-md: 8px; --radius-lg: 12px;
       --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       --font-mono: 'SF Mono', 'Fira Code', monospace;
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #1e1e1c; --bg-secondary: #2a2a28; --bg-info: #0c2a45;
-        --bg-success: #172e08; --text: #f0ede8; --text-secondary: #a0a09c;
-        --text-tertiary: #6b6b68; --text-info: #85b7eb; --text-success: #97c459;
+        --bg: #1e1e1c; --bg-secondary: #2a2a28; --bg-info: #0c2a45; --bg-success: #172e08;
+        --text: #f0ede8; --text-secondary: #a0a09c; --text-tertiary: #6b6b68;
+        --text-info: #85b7eb; --text-success: #97c459;
         --border: rgba(255,255,255,0.1); --border-md: rgba(255,255,255,0.22);
       }
     }
@@ -88,17 +79,15 @@
     .success-icon { width: 60px; height: 60px; border-radius: 50%; background: var(--bg-success); margin: 0 auto 1.25rem; display: flex; align-items: center; justify-content: center; }
     .success-icon svg { width: 30px; height: 30px; stroke: var(--text-success); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
     .nota { font-size: 12px; color: var(--text-tertiary); text-align: center; margin-top: 10px; }
-    .saving-msg { font-size: 13px; color: var(--text-secondary); text-align: center; margin-top: 8px; }
     @media (max-width: 480px) { .grid-2 { grid-template-columns: 1fr; } .hab-grid { grid-template-columns: 1fr; } .full { grid-column: 1; } }
   </style>
 </head>
 <body>
 <div class="wrap">
   <div class="header">
-    <h1>Hotel y Resto TATA RISAU</h1>
+    <h1>Hotel y Resto Tata Risau</h1>
     <p>Rincón de los Sauces, Neuquén · Reservas online</p>
   </div>
-
   <div class="steps">
     <div class="step active" id="s1"><span class="step-num">1</span> Datos</div>
     <div class="step-line"></div>
@@ -185,10 +174,10 @@
   <div id="paso4" style="display:none;">
     <button class="btn-back" onclick="irPaso(3)">← Volver</button>
     <div class="card" id="pago-card"></div>
-    <p class="nota">Al confirmar el pago, tu reserva quedará registrada automáticamente en nuestra base de datos.</p>
+    <p class="nota">Al confirmar el pago, tu reserva quedará registrada automáticamente.</p>
   </div>
 
-  <!-- PASO 5: Confirmación -->
+  <!-- PASO 5 -->
   <div id="paso5" style="display:none;">
     <div class="card" style="text-align:center; padding: 2.5rem 1.5rem;">
       <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -202,8 +191,8 @@
 </div>
 
 <script>
-
-  const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbykiP2GvNV5o3zjttW8I7lPcw5zbqwmqi9maj2tiNe9hELE9piNGb-bqnenAM_RvwF_bg/exec";
+  // ⚠️ REEMPLAZÁ con tu URL de Apps Script
+  const WEBHOOK_URL = "PEGAR_URL_DEL_APPS_SCRIPT_AQUI";
 
   const HABITACIONES = [
     { id: 'doble',     nombre: 'Doble',     camas: 2, desc: 'Ideal para parejas',   precio: 110000 },
@@ -212,9 +201,7 @@
     { id: 'quintuple', nombre: 'Quíntuple', camas: 5, desc: 'Máxima capacidad',     precio: 230000 },
   ];
 
-  let habSeleccionada = null;
-  let pagoMetodo = 'mp';
-  let tieneVehiculo = false;
+  let habSeleccionada = null, pagoMetodo = 'mp', tieneVehiculo = false;
 
   function fmt(n) { return '$' + n.toLocaleString('es-AR'); }
 
@@ -259,21 +246,20 @@
   }
 
   function irPaso2() {
-    if (!document.getElementById('nombre').value.trim() || !document.getElementById('apellido').value.trim()) { alert('Completá nombre y apellido para continuar.'); return; }
+    if (!document.getElementById('nombre').value.trim() || !document.getElementById('apellido').value.trim()) { alert('Completá nombre y apellido.'); return; }
     if (!document.getElementById('fecha_in').value || !document.getElementById('fecha_out').value) { alert('Ingresá las fechas de estadía.'); return; }
     if (calcNoches() <= 0) { alert('La fecha de egreso debe ser posterior al ingreso.'); return; }
     renderHabs(); irPaso(2);
   }
 
   function irPaso3() {
-    if (!habSeleccionada) { alert('Seleccioná una habitación para continuar.'); return; }
+    if (!habSeleccionada) { alert('Seleccioná una habitación.'); return; }
     renderResumen(); irPaso(3);
   }
 
   function renderResumen() {
     const hab = HABITACIONES.find(h => h.id === habSeleccionada);
     const noches = calcNoches();
-    const total = hab.precio * noches;
     const rows = [
       ['Huésped', document.getElementById('nombre').value + ' ' + document.getElementById('apellido').value],
       ['DNI', document.getElementById('dni').value || '—'],
@@ -287,23 +273,18 @@
       ['Noches', noches],
       ['Precio por noche', fmt(hab.precio)],
     ];
-    if (tieneVehiculo) {
-      rows.push(['Vehículo', document.getElementById('tipo_veh').value || '—']);
-      rows.push(['Patente', document.getElementById('patente').value || '—']);
-    }
+    if (tieneVehiculo) { rows.push(['Vehículo', document.getElementById('tipo_veh').value || '—']); rows.push(['Patente', document.getElementById('patente').value || '—']); }
     if (document.getElementById('obs').value.trim()) rows.push(['Observaciones', document.getElementById('obs').value.trim()]);
     document.getElementById('resumen-content').innerHTML =
       rows.map(([l,v]) => `<div class="resumen-row"><span class="resumen-label">${l}</span><span class="resumen-val">${v}</span></div>`).join('') +
-      `<div class="total-row"><span>Total</span><span>${fmt(total)}</span></div>`;
+      `<div class="total-row"><span>Total</span><span>${fmt(hab.precio * noches)}</span></div>`;
   }
 
   function selPago(m) {
     pagoMetodo = m;
     document.getElementById('mp-opt').className = 'badge-pago' + (m === 'mp' ? ' selected' : '');
     document.getElementById('tf-opt').className = 'badge-pago' + (m === 'tf' ? ' selected' : '');
-    document.getElementById('pago-desc').textContent = m === 'mp'
-      ? 'Pagá con QR o link de pago de Mercado Pago. Rápido y seguro.'
-      : 'Transferencia bancaria al CBU del establecimiento.';
+    document.getElementById('pago-desc').textContent = m === 'mp' ? 'Pagá con QR o link de Mercado Pago.' : 'Transferencia bancaria al CBU del establecimiento.';
   }
 
   function irPago() {
@@ -311,29 +292,22 @@
     const total = hab.precio * calcNoches();
     const card = document.getElementById('pago-card');
     if (pagoMetodo === 'mp') {
-      card.innerHTML = `
-        <div class="section-title">Pago con Mercado Pago</div>
+      card.innerHTML = `<div class="section-title">Pago con Mercado Pago</div>
         <div class="mp-box">
-          <div class="sub">Total a pagar</div>
-          <div class="monto">${fmt(total)}</div>
+          <div class="sub">Total a pagar</div><div class="monto">${fmt(total)}</div>
           <div class="qr-sim"></div>
           <div class="sub" style="margin-bottom:1rem;">Escaneá el QR con la app de Mercado Pago</div>
           <button class="btn-primary" style="max-width:300px;margin:0 auto;" onclick="confirmar()">Simular pago exitoso →</button>
         </div>
-        <p class="nota">En producción este QR es generado por la API de Mercado Pago.</p>`;
+        <p class="nota">En producción el QR es generado por la API de Mercado Pago.</p>`;
     } else {
-      card.innerHTML = `
-        <div class="section-title">Transferencia bancaria</div>
+      card.innerHTML = `<div class="section-title">Transferencia bancaria</div>
         <div class="mp-box">
-          <div class="sub">Total a transferir</div>
-          <div class="monto">${fmt(total)}</div>
-          <div class="sub" style="margin:12px 0 4px;">CBU</div>
-          <div class="cbu-box">0000003100012345678900</div>
-          <div class="sub" style="margin:10px 0 4px;">Alias</div>
-          <div class="cbu-box">SAUCES.HOSTERIA</div>
-          <button class="btn-primary" style="max-width:300px;margin:1rem auto 0;" onclick="confirmar()">Ya transferí, confirmar reserva →</button>
-        </div>
-        <p class="nota">En producción se puede validar subiendo el comprobante.</p>`;
+          <div class="sub">Total a transferir</div><div class="monto">${fmt(total)}</div>
+          <div class="sub" style="margin:12px 0 4px;">CBU</div><div class="cbu-box">0000003100012345678900</div>
+          <div class="sub" style="margin:10px 0 4px;">Alias</div><div class="cbu-box">SAUCES.HOSTERIA</div>
+          <button class="btn-primary" style="max-width:300px;margin:1rem auto 0;" onclick="confirmar()">Ya transferí, confirmar →</button>
+        </div>`;
     }
     irPaso(4);
   }
@@ -342,10 +316,14 @@
     const hab = HABITACIONES.find(h => h.id === habSeleccionada);
     const noches = calcNoches();
     const total = hab.precio * noches;
+    const nombre = document.getElementById('nombre').value.trim();
 
-    // Armar payload
-    const payload = {
-      nombre:        document.getElementById('nombre').value.trim(),
+    const btn = document.querySelector('#paso4 .btn-primary');
+    if (btn) { btn.disabled = true; btn.textContent = 'Guardando...'; }
+
+    // Armamos los parámetros como query string
+    const params = new URLSearchParams({
+      nombre,
       apellido:      document.getElementById('apellido').value.trim(),
       dni:           document.getElementById('dni').value.trim(),
       edad:          document.getElementById('edad').value,
@@ -357,46 +335,35 @@
       camas:         hab.camas,
       fecha_in:      document.getElementById('fecha_in').value,
       fecha_out:     document.getElementById('fecha_out').value,
-      noches:        noches,
+      noches,
       precio_noche:  hab.precio,
-      total:         total,
+      total,
       metodo_pago:   pagoMetodo === 'mp' ? 'Mercado Pago' : 'Transferencia',
       vehiculo:      tieneVehiculo ? 'Sí' : 'No',
       tipo_vehiculo: tieneVehiculo ? document.getElementById('tipo_veh').value : '',
       patente:       tieneVehiculo ? document.getElementById('patente').value.trim() : '',
       observaciones: document.getElementById('obs').value.trim(),
-    };
+    });
 
-    // Deshabilitar botón mientras guarda
-    const btn = document.querySelector('#paso4 .btn-primary');
-    if (btn) { btn.disabled = true; btn.textContent = 'Guardando reserva...'; }
-
-    let numeroReserva = '—';
+    let numeroReserva = '';
     try {
-      const res = await fetch(WEBHOOK_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        mode: 'no-cors' // necesario para Apps Script sin dominio verificado
-      });
-      // con no-cors no podemos leer la respuesta, pero el dato se guarda igual
+      // GET request con los datos en la URL — no tiene problemas de CORS
+      const res = await fetch(WEBHOOK_URL + '?' + params.toString());
+      const json = await res.json();
+      if (json.ok) numeroReserva = json.reserva;
     } catch (err) {
-      console.warn('Error al guardar en Sheets:', err);
-      // No bloqueamos la confirmación al cliente si falla la red
+      console.warn('Error al guardar:', err);
     }
 
-    // Mostrar confirmación
-    document.getElementById('confirm-msg').textContent =
-      `Hola ${payload.nombre}, tu reserva fue registrada con éxito.`;
-    document.getElementById('confirm-numero').textContent =
-      `Tu reserva quedó guardada en nuestro sistema. Te contactaremos a la brevedad.`;
+    document.getElementById('confirm-msg').textContent = `Hola ${nombre}, tu reserva fue registrada con éxito.`;
+    document.getElementById('confirm-numero').textContent = numeroReserva ? `N° de reserva: ${numeroReserva}` : 'Pronto te contactaremos para confirmar.';
     document.getElementById('confirm-resumen').innerHTML = `
-      <div class="resumen-row"><span class="resumen-label">Huésped</span><span class="resumen-val">${payload.nombre} ${payload.apellido}</span></div>
+      <div class="resumen-row"><span class="resumen-label">Huésped</span><span class="resumen-val">${nombre} ${document.getElementById('apellido').value}</span></div>
       <div class="resumen-row"><span class="resumen-label">Habitación</span><span class="resumen-val">${hab.nombre} (${hab.camas} camas)</span></div>
-      <div class="resumen-row"><span class="resumen-label">Ingreso</span><span class="resumen-val">${fmtFecha(payload.fecha_in)}</span></div>
-      <div class="resumen-row"><span class="resumen-label">Egreso</span><span class="resumen-val">${fmtFecha(payload.fecha_out)}</span></div>
+      <div class="resumen-row"><span class="resumen-label">Ingreso</span><span class="resumen-val">${fmtFecha(document.getElementById('fecha_in').value)}</span></div>
+      <div class="resumen-row"><span class="resumen-label">Egreso</span><span class="resumen-val">${fmtFecha(document.getElementById('fecha_out').value)}</span></div>
       <div class="resumen-row"><span class="resumen-label">Noches</span><span class="resumen-val">${noches}</span></div>
-      <div class="resumen-row"><span class="resumen-label">Método de pago</span><span class="resumen-val">${payload.metodo_pago}</span></div>
+      <div class="resumen-row"><span class="resumen-label">Método de pago</span><span class="resumen-val">${pagoMetodo === 'mp' ? 'Mercado Pago' : 'Transferencia'}</span></div>
       <div class="total-row"><span>Total</span><span>${fmt(total)}</span></div>`;
 
     document.getElementById('s4').className = 'step done';
