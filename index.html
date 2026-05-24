@@ -9,9 +9,9 @@
     :root {
       --bg: #ffffff; --bg-secondary: #f5f5f3; --bg-info: #e6f1fb; --bg-success: #eaf3de;
       --text: #1a1a18; --text-secondary: #6b6b68; --text-tertiary: #9e9e9a;
-      --text-info: #185fa5; --text-success: #3b6d11;
+      --text-info: #185fa5; --text-success: #3b6d11; --text-error: #c0392b;
       --border: rgba(0,0,0,0.12); --border-md: rgba(0,0,0,0.25);
-      --border-info: #378add; --border-success: #639922;
+      --border-info: #378add; --border-success: #639922; --border-error: #e74c3c;
       --radius-md: 8px; --radius-lg: 12px;
       --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       --font-mono: 'SF Mono', 'Fira Code', monospace;
@@ -45,7 +45,10 @@
     .field label { font-size: 13px; color: var(--text-secondary); }
     .field input, .field select, .field textarea { font-family: var(--font); font-size: 14px; padding: 8px 10px; border: 0.5px solid var(--border-md); border-radius: var(--radius-md); background: var(--bg); color: var(--text); outline: none; transition: border-color 0.15s; }
     .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--border-info); }
+    .field input.error, .field select.error { border-color: var(--border-error); }
     .field textarea { resize: vertical; min-height: 72px; }
+    .field-error { font-size: 12px; color: var(--text-error); display: none; margin-top: 2px; }
+    .field-error.visible { display: block; }
     .vehiculo-toggle { display: flex; gap: 8px; margin-bottom: 12px; }
     .toggle-btn { flex: 1; padding: 8px; border: 0.5px solid var(--border-md); border-radius: var(--radius-md); background: transparent; font-size: 13px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; font-family: var(--font); }
     .toggle-btn.active { border-color: var(--text); color: var(--text); background: var(--bg-secondary); font-weight: 500; }
@@ -103,21 +106,58 @@
     <div class="card">
       <div class="section-title">Datos del titular</div>
       <div class="grid-2">
-        <div class="field"><label>Nombre *</label><input type="text" id="nombre" placeholder="Juan"></div>
-        <div class="field"><label>Apellido *</label><input type="text" id="apellido" placeholder="García"></div>
-        <div class="field"><label>DNI</label><input type="text" id="dni" placeholder="12.345.678"></div>
-        <div class="field"><label>Edad</label><input type="number" id="edad" placeholder="35" min="1" max="120"></div>
-        <div class="field"><label>Teléfono</label><input type="tel" id="telefono" placeholder="+54 9 299 ..."></div>
-        <div class="field"><label>Email</label><input type="email" id="email" placeholder="juan@email.com"></div>
-        <div class="field full"><label>Procedencia (ciudad / provincia)</label><input type="text" id="procedencia" placeholder="Ej: Neuquén capital"></div>
+        <div class="field">
+          <label>Nombre *</label>
+          <input type="text" id="nombre" placeholder="Juan">
+          <span class="field-error" id="err-nombre">Campo requerido</span>
+        </div>
+        <div class="field">
+          <label>Apellido *</label>
+          <input type="text" id="apellido" placeholder="García">
+          <span class="field-error" id="err-apellido">Campo requerido</span>
+        </div>
+        <div class="field">
+          <label>DNI *</label>
+          <input type="text" id="dni" placeholder="12.345.678">
+          <span class="field-error" id="err-dni">Campo requerido</span>
+        </div>
+        <div class="field">
+          <label>Edad *</label>
+          <input type="number" id="edad" placeholder="35" min="1" max="120">
+          <span class="field-error" id="err-edad">Campo requerido</span>
+        </div>
+        <div class="field">
+          <label>Teléfono *</label>
+          <input type="tel" id="telefono" placeholder="+54 9 299 ...">
+          <span class="field-error" id="err-telefono">Campo requerido</span>
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="email" placeholder="juan@email.com">
+        </div>
+        <div class="field full">
+          <label>Procedencia (ciudad / provincia)</label>
+          <input type="text" id="procedencia" placeholder="Ej: Neuquén capital">
+        </div>
       </div>
     </div>
     <div class="card">
       <div class="section-title">Estadía</div>
       <div class="grid-2">
-        <div class="field"><label>Fecha de ingreso *</label><input type="date" id="fecha_in"></div>
-        <div class="field"><label>Fecha de egreso *</label><input type="date" id="fecha_out"></div>
-        <div class="field"><label>Número de personas</label><input type="number" id="personas" placeholder="2" min="1" max="15"></div>
+        <div class="field">
+          <label>Fecha de ingreso *</label>
+          <input type="date" id="fecha_in">
+          <span class="field-error" id="err-fecha_in">Campo requerido</span>
+        </div>
+        <div class="field">
+          <label>Fecha de egreso *</label>
+          <input type="date" id="fecha_out">
+          <span class="field-error" id="err-fecha_out">Campo requerido</span>
+        </div>
+        <div class="field">
+          <label>Número de personas</label>
+          <input type="number" id="personas" placeholder="2" min="1" max="15">
+        </div>
       </div>
     </div>
     <div class="card">
@@ -191,7 +231,6 @@
 </div>
 
 <script>
-  // ⚠️ REEMPLAZÁ con tu URL de Apps Script
   const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby4eT4sZEwLgtxo5eypaF973V85JZ6d8sjkWbJDJpeDUmW9naXMXbJk3xFrfao0ws0Kng/exec";
 
   const HABITACIONES = [
@@ -204,6 +243,8 @@
   let habSeleccionada = null, pagoMetodo = 'mp', tieneVehiculo = false;
 
   function fmt(n) { return '$' + n.toLocaleString('es-AR'); }
+  function v(id) { return document.getElementById(id).value.trim(); }
+  function val(id) { return document.getElementById(id).value; }
 
   function toggleVeh(val) {
     tieneVehiculo = val;
@@ -224,8 +265,7 @@
   function selectHab(id) { habSeleccionada = id; renderHabs(); }
 
   function calcNoches() {
-    const fi = document.getElementById('fecha_in').value;
-    const fo = document.getElementById('fecha_out').value;
+    const fi = val('fecha_in'), fo = val('fecha_out');
     if (!fi || !fo) return 0;
     const d = (new Date(fo) - new Date(fi)) / 86400000;
     return d > 0 ? Math.round(d) : 0;
@@ -245,10 +285,36 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  // Validación con resaltado de campos
+  function validarCampo(id, errId, condicion) {
+    const input = document.getElementById(id);
+    const err = document.getElementById(errId);
+    if (!condicion) {
+      input.classList.add('error');
+      err.classList.add('visible');
+      return false;
+    }
+    input.classList.remove('error');
+    err.classList.remove('visible');
+    return true;
+  }
+
   function irPaso2() {
-    if (!document.getElementById('nombre').value.trim() || !document.getElementById('apellido').value.trim()) { alert('Completá nombre y apellido.'); return; }
-    if (!document.getElementById('fecha_in').value || !document.getElementById('fecha_out').value) { alert('Ingresá las fechas de estadía.'); return; }
-    if (calcNoches() <= 0) { alert('La fecha de egreso debe ser posterior al ingreso.'); return; }
+    let ok = true;
+    ok = validarCampo('nombre',   'err-nombre',   v('nombre') !== '')   && ok;
+    ok = validarCampo('apellido', 'err-apellido', v('apellido') !== '')  && ok;
+    ok = validarCampo('dni',      'err-dni',      v('dni') !== '')       && ok;
+    ok = validarCampo('edad',     'err-edad',     val('edad') !== '')    && ok;
+    ok = validarCampo('telefono', 'err-telefono', v('telefono') !== '')  && ok;
+    ok = validarCampo('fecha_in', 'err-fecha_in', val('fecha_in') !== '') && ok;
+    ok = validarCampo('fecha_out','err-fecha_out',val('fecha_out') !== '') && ok;
+    if (!ok) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    if (calcNoches() <= 0) {
+      validarCampo('fecha_out', 'err-fecha_out', false);
+      document.getElementById('err-fecha_out').textContent = 'Debe ser posterior al ingreso';
+      return;
+    }
+    document.getElementById('err-fecha_out').textContent = 'Campo requerido';
     renderHabs(); irPaso(2);
   }
 
@@ -261,22 +327,26 @@
     const hab = HABITACIONES.find(h => h.id === habSeleccionada);
     const noches = calcNoches();
     const rows = [
-      ['Huésped', document.getElementById('nombre').value + ' ' + document.getElementById('apellido').value],
-      ['DNI', document.getElementById('dni').value || '—'],
-      ['Email', document.getElementById('email').value || '—'],
-      ['Teléfono', document.getElementById('telefono').value || '—'],
-      ['Procedencia', document.getElementById('procedencia').value || '—'],
-      ['Personas', document.getElementById('personas').value || '1'],
-      ['Habitación', hab.nombre + ' (' + hab.camas + ' camas)'],
-      ['Ingreso', fmtFecha(document.getElementById('fecha_in').value)],
-      ['Egreso', fmtFecha(document.getElementById('fecha_out').value)],
-      ['Noches', noches],
+      ['Huésped',        v('nombre') + ' ' + v('apellido')],
+      ['DNI',            v('dni')          || '—'],
+      ['Edad',           val('edad')       || '—'],
+      ['Teléfono',       v('telefono')     || '—'],
+      ['Email',          v('email')        || '—'],
+      ['Procedencia',    v('procedencia')  || '—'],
+      ['Personas',       val('personas')   || '—'],
+      ['Habitación',     hab.nombre + ' (' + hab.camas + ' camas)'],
+      ['Ingreso',        fmtFecha(val('fecha_in'))],
+      ['Egreso',         fmtFecha(val('fecha_out'))],
+      ['Noches',         noches],
       ['Precio por noche', fmt(hab.precio)],
     ];
-    if (tieneVehiculo) { rows.push(['Vehículo', document.getElementById('tipo_veh').value || '—']); rows.push(['Patente', document.getElementById('patente').value || '—']); }
-    if (document.getElementById('obs').value.trim()) rows.push(['Observaciones', document.getElementById('obs').value.trim()]);
+    if (tieneVehiculo) {
+      rows.push(['Vehículo', val('tipo_veh') || '—']);
+      rows.push(['Patente',  v('patente')    || '—']);
+    }
+    if (v('obs')) rows.push(['Observaciones', v('obs')]);
     document.getElementById('resumen-content').innerHTML =
-      rows.map(([l,v]) => `<div class="resumen-row"><span class="resumen-label">${l}</span><span class="resumen-val">${v}</span></div>`).join('') +
+      rows.map(([l,vl]) => `<div class="resumen-row"><span class="resumen-label">${l}</span><span class="resumen-val">${vl}</span></div>`).join('') +
       `<div class="total-row"><span>Total</span><span>${fmt(hab.precio * noches)}</span></div>`;
   }
 
@@ -316,38 +386,36 @@
     const hab = HABITACIONES.find(h => h.id === habSeleccionada);
     const noches = calcNoches();
     const total = hab.precio * noches;
-    const nombre = document.getElementById('nombre').value.trim();
+    const nombre = v('nombre');
 
     const btn = document.querySelector('#paso4 .btn-primary');
     if (btn) { btn.disabled = true; btn.textContent = 'Guardando...'; }
 
-    // Armamos los parámetros como query string
     const params = new URLSearchParams({
       nombre,
-      apellido:      document.getElementById('apellido').value.trim(),
-      dni:           document.getElementById('dni').value.trim(),
-      edad:          document.getElementById('edad').value,
-      telefono:      document.getElementById('telefono').value.trim(),
-      email:         document.getElementById('email').value.trim(),
-      procedencia:   document.getElementById('procedencia').value.trim(),
-      personas:      document.getElementById('personas').value,
+      apellido:      v('apellido'),
+      dni:           v('dni'),
+      edad:          val('edad')        || '—',
+      telefono:      v('telefono'),
+      email:         v('email')         || '—',
+      procedencia:   v('procedencia')   || '—',
+      personas:      val('personas')    || '—',
       habitacion:    hab.nombre,
       camas:         hab.camas,
-      fecha_in:      document.getElementById('fecha_in').value,
-      fecha_out:     document.getElementById('fecha_out').value,
+      fecha_in:      val('fecha_in'),
+      fecha_out:     val('fecha_out'),
       noches,
       precio_noche:  hab.precio,
       total,
       metodo_pago:   pagoMetodo === 'mp' ? 'Mercado Pago' : 'Transferencia',
       vehiculo:      tieneVehiculo ? 'Sí' : 'No',
-      tipo_vehiculo: tieneVehiculo ? document.getElementById('tipo_veh').value : '',
-      patente:       tieneVehiculo ? document.getElementById('patente').value.trim() : '',
-      observaciones: document.getElementById('obs').value.trim(),
+      tipo_vehiculo: tieneVehiculo ? val('tipo_veh') : '—',
+      patente:       tieneVehiculo ? v('patente') || '—' : '—',
+      observaciones: v('obs') || '—',
     });
 
     let numeroReserva = '';
     try {
-      // GET request con los datos en la URL — no tiene problemas de CORS
       const res = await fetch(WEBHOOK_URL + '?' + params.toString());
       const json = await res.json();
       if (json.ok) numeroReserva = json.reserva;
@@ -358,10 +426,10 @@
     document.getElementById('confirm-msg').textContent = `Hola ${nombre}, tu reserva fue registrada con éxito.`;
     document.getElementById('confirm-numero').textContent = numeroReserva ? `N° de reserva: ${numeroReserva}` : 'Pronto te contactaremos para confirmar.';
     document.getElementById('confirm-resumen').innerHTML = `
-      <div class="resumen-row"><span class="resumen-label">Huésped</span><span class="resumen-val">${nombre} ${document.getElementById('apellido').value}</span></div>
+      <div class="resumen-row"><span class="resumen-label">Huésped</span><span class="resumen-val">${nombre} ${v('apellido')}</span></div>
       <div class="resumen-row"><span class="resumen-label">Habitación</span><span class="resumen-val">${hab.nombre} (${hab.camas} camas)</span></div>
-      <div class="resumen-row"><span class="resumen-label">Ingreso</span><span class="resumen-val">${fmtFecha(document.getElementById('fecha_in').value)}</span></div>
-      <div class="resumen-row"><span class="resumen-label">Egreso</span><span class="resumen-val">${fmtFecha(document.getElementById('fecha_out').value)}</span></div>
+      <div class="resumen-row"><span class="resumen-label">Ingreso</span><span class="resumen-val">${fmtFecha(val('fecha_in'))}</span></div>
+      <div class="resumen-row"><span class="resumen-label">Egreso</span><span class="resumen-val">${fmtFecha(val('fecha_out'))}</span></div>
       <div class="resumen-row"><span class="resumen-label">Noches</span><span class="resumen-val">${noches}</span></div>
       <div class="resumen-row"><span class="resumen-label">Método de pago</span><span class="resumen-val">${pagoMetodo === 'mp' ? 'Mercado Pago' : 'Transferencia'}</span></div>
       <div class="total-row"><span>Total</span><span>${fmt(total)}</span></div>`;
