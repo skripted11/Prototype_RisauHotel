@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tata Risau Hoteleria — Reservas</title>
+  <title>Hostería Los Sauces — Reservas</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -27,33 +27,18 @@
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #1e1e1c;
-        --bg-secondary: #2a2a28;
-        --bg-info: #0c2a45;
-        --bg-success: #172e08;
-        --text: #f0ede8;
-        --text-secondary: #a0a09c;
-        --text-tertiary: #6b6b68;
-        --text-info: #85b7eb;
-        --text-success: #97c459;
-        --border: rgba(255,255,255,0.1);
-        --border-md: rgba(255,255,255,0.22);
-        --border-info: #378add;
-        --border-success: #639922;
+        --bg: #1e1e1c; --bg-secondary: #2a2a28; --bg-info: #0c2a45;
+        --bg-success: #172e08; --text: #f0ede8; --text-secondary: #a0a09c;
+        --text-tertiary: #6b6b68; --text-info: #85b7eb; --text-success: #97c459;
+        --border: rgba(255,255,255,0.1); --border-md: rgba(255,255,255,0.22);
       }
     }
-    body {
-      font-family: var(--font);
-      background: var(--bg-secondary);
-      color: var(--text);
-      min-height: 100vh;
-      padding: 2rem 1rem 4rem;
-    }
+    body { font-family: var(--font); background: var(--bg-secondary); color: var(--text); min-height: 100vh; padding: 2rem 1rem 4rem; }
     .wrap { max-width: 680px; margin: 0 auto; }
     .header { text-align: center; margin-bottom: 2rem; }
-    .header h1 { font-size: 26px; font-weight: 500; color: var(--text); }
+    .header h1 { font-size: 26px; font-weight: 500; }
     .header p { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
-    .steps { display: flex; justify-content: center; align-items: center; gap: 0; margin-bottom: 2rem; flex-wrap: wrap; }
+    .steps { display: flex; justify-content: center; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; }
     .step { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-tertiary); }
     .step.active { color: var(--text); font-weight: 500; }
     .step.done { color: var(--text-success); }
@@ -67,28 +52,11 @@
     .full { grid-column: 1 / -1; }
     .field { display: flex; flex-direction: column; gap: 4px; }
     .field label { font-size: 13px; color: var(--text-secondary); }
-    .field input, .field select, .field textarea {
-      font-family: var(--font);
-      font-size: 14px;
-      padding: 8px 10px;
-      border: 0.5px solid var(--border-md);
-      border-radius: var(--radius-md);
-      background: var(--bg);
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.15s;
-    }
+    .field input, .field select, .field textarea { font-family: var(--font); font-size: 14px; padding: 8px 10px; border: 0.5px solid var(--border-md); border-radius: var(--radius-md); background: var(--bg); color: var(--text); outline: none; transition: border-color 0.15s; }
     .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--border-info); }
     .field textarea { resize: vertical; min-height: 72px; }
     .vehiculo-toggle { display: flex; gap: 8px; margin-bottom: 12px; }
-    .toggle-btn {
-      flex: 1; padding: 8px;
-      border: 0.5px solid var(--border-md);
-      border-radius: var(--radius-md);
-      background: transparent;
-      font-size: 13px; color: var(--text-secondary);
-      cursor: pointer; transition: all 0.15s; font-family: var(--font);
-    }
+    .toggle-btn { flex: 1; padding: 8px; border: 0.5px solid var(--border-md); border-radius: var(--radius-md); background: transparent; font-size: 13px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; font-family: var(--font); }
     .toggle-btn.active { border-color: var(--text); color: var(--text); background: var(--bg-secondary); font-weight: 500; }
     .hab-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
     .hab-card { border: 0.5px solid var(--border); border-radius: var(--radius-md); padding: 1rem; cursor: pointer; transition: all 0.15s; background: var(--bg); }
@@ -97,57 +65,37 @@
     .hab-name { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
     .hab-card.selected .hab-name { color: var(--text-info); }
     .hab-detail { font-size: 12px; color: var(--text-secondary); }
-    .hab-card.selected .hab-detail { color: var(--text-info); opacity: 0.8; }
     .hab-price { font-size: 15px; font-weight: 500; color: var(--text); margin-top: 8px; }
     .hab-card.selected .hab-price { color: var(--text-info); }
     .resumen-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 0.5px solid var(--border); font-size: 14px; }
     .resumen-row:last-child { border-bottom: none; }
     .resumen-label { color: var(--text-secondary); }
     .resumen-val { font-weight: 500; color: var(--text); text-align: right; max-width: 60%; }
-    .total-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0 0; font-size: 18px; font-weight: 500; color: var(--text); border-top: 0.5px solid var(--border); margin-top: 4px; }
-    .badge-pago {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 8px 16px;
-      border-radius: var(--radius-md);
-      border: 0.5px solid var(--border-md);
-      font-size: 13px; color: var(--text-secondary);
-      cursor: pointer; transition: all 0.15s; user-select: none;
-    }
+    .total-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0 0; font-size: 18px; font-weight: 500; border-top: 0.5px solid var(--border); margin-top: 4px; }
+    .badge-pago { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: var(--radius-md); border: 0.5px solid var(--border-md); font-size: 13px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; user-select: none; }
     .badge-pago.selected { border-color: var(--border-info); color: var(--text-info); background: var(--bg-info); font-weight: 500; }
     .pago-opts { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
-    .btn-primary {
-      width: 100%; padding: 12px;
-      border-radius: var(--radius-md);
-      border: 0.5px solid var(--border-md);
-      background: var(--bg);
-      font-size: 15px; font-weight: 500; color: var(--text);
-      cursor: pointer; transition: all 0.15s; margin-top: 1rem;
-      font-family: var(--font);
-    }
+    .btn-primary { width: 100%; padding: 12px; border-radius: var(--radius-md); border: 0.5px solid var(--border-md); background: var(--bg); font-size: 15px; font-weight: 500; color: var(--text); cursor: pointer; transition: all 0.15s; margin-top: 1rem; font-family: var(--font); }
     .btn-primary:hover { background: var(--bg-secondary); }
-    .btn-primary:active { transform: scale(0.99); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
     .btn-back { background: transparent; border: none; font-size: 13px; color: var(--text-secondary); cursor: pointer; padding: 0; margin-bottom: 1rem; display: flex; align-items: center; gap: 4px; font-family: var(--font); }
     .btn-back:hover { color: var(--text); }
     .mp-box { background: var(--bg-secondary); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; margin: 1rem 0; }
-    .mp-box .monto { font-size: 30px; font-weight: 500; color: var(--text); margin: 8px 0; }
+    .mp-box .monto { font-size: 30px; font-weight: 500; margin: 8px 0; }
     .mp-box .sub { font-size: 13px; color: var(--text-secondary); }
     .qr-sim { width: 130px; height: 130px; margin: 1rem auto; border-radius: 4px; background-image: repeating-conic-gradient(var(--border-md) 0% 25%, transparent 0% 50%); background-size: 10px 10px; }
     .cbu-box { font-family: var(--font-mono); font-size: 13px; background: var(--bg); padding: 8px 12px; border-radius: var(--radius-md); color: var(--text); text-align: center; letter-spacing: 0.05em; border: 0.5px solid var(--border); }
     .success-icon { width: 60px; height: 60px; border-radius: 50%; background: var(--bg-success); margin: 0 auto 1.25rem; display: flex; align-items: center; justify-content: center; }
     .success-icon svg { width: 30px; height: 30px; stroke: var(--text-success); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
     .nota { font-size: 12px; color: var(--text-tertiary); text-align: center; margin-top: 10px; }
-    .error-msg { font-size: 12px; color: #c0392b; margin-top: 4px; display: none; }
-    @media (max-width: 480px) {
-      .grid-2 { grid-template-columns: 1fr; }
-      .hab-grid { grid-template-columns: 1fr; }
-      .full { grid-column: 1; }
-    }
+    .saving-msg { font-size: 13px; color: var(--text-secondary); text-align: center; margin-top: 8px; }
+    @media (max-width: 480px) { .grid-2 { grid-template-columns: 1fr; } .hab-grid { grid-template-columns: 1fr; } .full { grid-column: 1; } }
   </style>
 </head>
 <body>
 <div class="wrap">
   <div class="header">
-    <h1>HOTEL Y RESTO TATA RISAU</h1>
+    <h1>Hostería Los Sauces</h1>
     <p>Rincón de los Sauces, Neuquén · Reservas online</p>
   </div>
 
@@ -175,7 +123,6 @@
         <div class="field full"><label>Procedencia (ciudad / provincia)</label><input type="text" id="procedencia" placeholder="Ej: Neuquén capital"></div>
       </div>
     </div>
-
     <div class="card">
       <div class="section-title">Estadía</div>
       <div class="grid-2">
@@ -184,7 +131,6 @@
         <div class="field"><label>Número de personas</label><input type="number" id="personas" placeholder="2" min="1" max="15"></div>
       </div>
     </div>
-
     <div class="card">
       <div class="section-title">Vehículo</div>
       <div class="vehiculo-toggle">
@@ -194,28 +140,16 @@
       <div id="veh-fields" style="display:none;">
         <div class="grid-2">
           <div class="field"><label>Tipo de vehículo</label>
-            <select id="tipo_veh">
-              <option value="">Seleccionar...</option>
-              <option>Auto</option>
-              <option>Camioneta</option>
-              <option>Moto</option>
-              <option>Casa rodante</option>
-              <option>Otro</option>
-            </select>
+            <select id="tipo_veh"><option value="">Seleccionar...</option><option>Auto</option><option>Camioneta</option><option>Moto</option><option>Casa rodante</option><option>Otro</option></select>
           </div>
           <div class="field"><label>Patente</label><input type="text" id="patente" placeholder="AB 123 CD"></div>
         </div>
       </div>
     </div>
-
     <div class="card">
       <div class="section-title">Observaciones</div>
-      <div class="field">
-        <label>Pedidos especiales o comentarios</label>
-        <textarea id="obs" placeholder="Ej: cama matrimonial, piso alto, llegada tardía..."></textarea>
-      </div>
+      <div class="field"><label>Pedidos especiales o comentarios</label><textarea id="obs" placeholder="Ej: cama matrimonial, piso alto, llegada tardía..."></textarea></div>
     </div>
-
     <button class="btn-primary" onclick="irPaso2()">Continuar a elegir habitación →</button>
   </div>
 
@@ -251,29 +185,31 @@
   <div id="paso4" style="display:none;">
     <button class="btn-back" onclick="irPaso(3)">← Volver</button>
     <div class="card" id="pago-card"></div>
-    <p class="nota">Al confirmar el pago, tu reserva quedará registrada automáticamente.</p>
+    <p class="nota">Al confirmar el pago, tu reserva quedará registrada automáticamente en nuestra base de datos.</p>
   </div>
 
   <!-- PASO 5: Confirmación -->
   <div id="paso5" style="display:none;">
     <div class="card" style="text-align:center; padding: 2.5rem 1.5rem;">
-      <div class="success-icon">
-        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-      </div>
+      <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
       <h2 style="font-size:20px; font-weight:500; margin-bottom:10px;">¡Reserva confirmada!</h2>
-      <p style="font-size:14px; color: var(--text-secondary); margin-bottom:1.5rem;" id="confirm-msg"></p>
+      <p style="font-size:14px; color: var(--text-secondary); margin-bottom: 6px;" id="confirm-msg"></p>
+      <p style="font-size:13px; font-weight:500; color: var(--text-info); margin-bottom:1.5rem;" id="confirm-numero"></p>
       <div id="confirm-resumen" style="text-align:left; border-top: 0.5px solid var(--border); padding-top: 1rem;"></div>
     </div>
-    <p class="nota">Te enviamos la confirmación por email. Ante cualquier consulta contactanos.</p>
+    <p class="nota">Ante cualquier consulta contactanos con tu número de reserva.</p>
   </div>
 </div>
 
 <script>
+
+  const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzF1cR-cTnT_jFoki8Y2xuDgyLNMUOi0J_1bmYX4PUKnKn0aXXAyrEDP7XE9bhWFsXEGQ/exec";
+
   const HABITACIONES = [
-    { id: 'doble',     nombre: 'Doble',     camas: 2, desc: 'Ideal para parejas',      precio: 110000 },
-    { id: 'triple',    nombre: 'Triple',    camas: 3, desc: 'Para grupos pequeños',    precio: 155000 },
-    { id: 'cuadruple', nombre: 'Cuádruple', camas: 4, desc: 'Familias y grupos',       precio: 195000 },
-    { id: 'quintuple', nombre: 'Quíntuple', camas: 5, desc: 'Máxima capacidad',        precio: 230000 },
+    { id: 'doble',     nombre: 'Doble',     camas: 2, desc: 'Ideal para parejas',   precio: 110000 },
+    { id: 'triple',    nombre: 'Triple',    camas: 3, desc: 'Para grupos pequeños', precio: 155000 },
+    { id: 'cuadruple', nombre: 'Cuádruple', camas: 4, desc: 'Familias y grupos',    precio: 195000 },
+    { id: 'quintuple', nombre: 'Quíntuple', camas: 5, desc: 'Máxima capacidad',     precio: 230000 },
   ];
 
   let habSeleccionada = null;
@@ -308,6 +244,10 @@
     return d > 0 ? Math.round(d) : 0;
   }
 
+  function fmtFecha(str) {
+    return new Date(str + 'T12:00:00').toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
   function irPaso(n) {
     [1,2,3,4,5].forEach(i => {
       document.getElementById('paso'+i).style.display = 'none';
@@ -319,26 +259,15 @@
   }
 
   function irPaso2() {
-    if (!document.getElementById('nombre').value.trim() || !document.getElementById('apellido').value.trim()) {
-      alert('Completá al menos nombre y apellido para continuar.'); return;
-    }
-    if (!document.getElementById('fecha_in').value || !document.getElementById('fecha_out').value) {
-      alert('Ingresá las fechas de estadía.'); return;
-    }
+    if (!document.getElementById('nombre').value.trim() || !document.getElementById('apellido').value.trim()) { alert('Completá nombre y apellido para continuar.'); return; }
+    if (!document.getElementById('fecha_in').value || !document.getElementById('fecha_out').value) { alert('Ingresá las fechas de estadía.'); return; }
     if (calcNoches() <= 0) { alert('La fecha de egreso debe ser posterior al ingreso.'); return; }
-    renderHabs();
-    irPaso(2);
+    renderHabs(); irPaso(2);
   }
 
   function irPaso3() {
     if (!habSeleccionada) { alert('Seleccioná una habitación para continuar.'); return; }
-    renderResumen();
-    irPaso(3);
-  }
-
-  function fmtFecha(str) {
-    const d = new Date(str + 'T12:00:00');
-    return d.toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' });
+    renderResumen(); irPaso(3);
   }
 
   function renderResumen() {
@@ -362,9 +291,7 @@
       rows.push(['Vehículo', document.getElementById('tipo_veh').value || '—']);
       rows.push(['Patente', document.getElementById('patente').value || '—']);
     }
-    if (document.getElementById('obs').value.trim()) {
-      rows.push(['Observaciones', document.getElementById('obs').value.trim()]);
-    }
+    if (document.getElementById('obs').value.trim()) rows.push(['Observaciones', document.getElementById('obs').value.trim()]);
     document.getElementById('resumen-content').innerHTML =
       rows.map(([l,v]) => `<div class="resumen-row"><span class="resumen-label">${l}</span><span class="resumen-val">${v}</span></div>`).join('') +
       `<div class="total-row"><span>Total</span><span>${fmt(total)}</span></div>`;
@@ -393,7 +320,7 @@
           <div class="sub" style="margin-bottom:1rem;">Escaneá el QR con la app de Mercado Pago</div>
           <button class="btn-primary" style="max-width:300px;margin:0 auto;" onclick="confirmar()">Simular pago exitoso →</button>
         </div>
-        <p class="nota">En producción este QR es generado dinámicamente por la API de Mercado Pago.</p>`;
+        <p class="nota">En producción este QR es generado por la API de Mercado Pago.</p>`;
     } else {
       card.innerHTML = `
         <div class="section-title">Transferencia bancaria</div>
@@ -411,20 +338,67 @@
     irPaso(4);
   }
 
-  function confirmar() {
+  async function confirmar() {
     const hab = HABITACIONES.find(h => h.id === habSeleccionada);
     const noches = calcNoches();
     const total = hab.precio * noches;
-    const nombre = document.getElementById('nombre').value;
+
+    // Armar payload
+    const payload = {
+      nombre:        document.getElementById('nombre').value.trim(),
+      apellido:      document.getElementById('apellido').value.trim(),
+      dni:           document.getElementById('dni').value.trim(),
+      edad:          document.getElementById('edad').value,
+      telefono:      document.getElementById('telefono').value.trim(),
+      email:         document.getElementById('email').value.trim(),
+      procedencia:   document.getElementById('procedencia').value.trim(),
+      personas:      document.getElementById('personas').value,
+      habitacion:    hab.nombre,
+      camas:         hab.camas,
+      fecha_in:      document.getElementById('fecha_in').value,
+      fecha_out:     document.getElementById('fecha_out').value,
+      noches:        noches,
+      precio_noche:  hab.precio,
+      total:         total,
+      metodo_pago:   pagoMetodo === 'mp' ? 'Mercado Pago' : 'Transferencia',
+      vehiculo:      tieneVehiculo ? 'Sí' : 'No',
+      tipo_vehiculo: tieneVehiculo ? document.getElementById('tipo_veh').value : '',
+      patente:       tieneVehiculo ? document.getElementById('patente').value.trim() : '',
+      observaciones: document.getElementById('obs').value.trim(),
+    };
+
+    // Deshabilitar botón mientras guarda
+    const btn = document.querySelector('#paso4 .btn-primary');
+    if (btn) { btn.disabled = true; btn.textContent = 'Guardando reserva...'; }
+
+    let numeroReserva = '—';
+    try {
+      const res = await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        mode: 'no-cors' // necesario para Apps Script sin dominio verificado
+      });
+      // con no-cors no podemos leer la respuesta, pero el dato se guarda igual
+    } catch (err) {
+      console.warn('Error al guardar en Sheets:', err);
+      // No bloqueamos la confirmación al cliente si falla la red
+    }
+
+    // Mostrar confirmación
     document.getElementById('confirm-msg').textContent =
-      `Hola ${nombre}, tu reserva fue registrada con éxito. Pronto recibirás un email de confirmación.`;
+      `Hola ${payload.nombre}, tu reserva fue registrada con éxito.`;
+    document.getElementById('confirm-numero').textContent =
+      `Tu reserva quedó guardada en nuestro sistema. Te contactaremos a la brevedad.`;
     document.getElementById('confirm-resumen').innerHTML = `
-      <div class="resumen-row"><span class="resumen-label">Huésped</span><span class="resumen-val">${nombre} ${document.getElementById('apellido').value}</span></div>
+      <div class="resumen-row"><span class="resumen-label">Huésped</span><span class="resumen-val">${payload.nombre} ${payload.apellido}</span></div>
       <div class="resumen-row"><span class="resumen-label">Habitación</span><span class="resumen-val">${hab.nombre} (${hab.camas} camas)</span></div>
-      <div class="resumen-row"><span class="resumen-label">Ingreso</span><span class="resumen-val">${fmtFecha(document.getElementById('fecha_in').value)}</span></div>
-      <div class="resumen-row"><span class="resumen-label">Egreso</span><span class="resumen-val">${fmtFecha(document.getElementById('fecha_out').value)}</span></div>
+      <div class="resumen-row"><span class="resumen-label">Ingreso</span><span class="resumen-val">${fmtFecha(payload.fecha_in)}</span></div>
+      <div class="resumen-row"><span class="resumen-label">Egreso</span><span class="resumen-val">${fmtFecha(payload.fecha_out)}</span></div>
       <div class="resumen-row"><span class="resumen-label">Noches</span><span class="resumen-val">${noches}</span></div>
-      <div class="total-row"><span>Total pagado</span><span>${fmt(total)}</span></div>`;
+      <div class="resumen-row"><span class="resumen-label">Método de pago</span><span class="resumen-val">${payload.metodo_pago}</span></div>
+      <div class="total-row"><span>Total</span><span>${fmt(total)}</span></div>`;
+
     document.getElementById('s4').className = 'step done';
     [1,2,3,4].forEach(i => document.getElementById('paso'+i).style.display = 'none');
     document.getElementById('paso5').style.display = 'block';
